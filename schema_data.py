@@ -125,14 +125,16 @@ def seed_database(conn):
 
     # ── Artists ──────────────────────────────────────────────────────────────
     # Columns: artist_id, name, genre, origin_city
-    # Replace the placeholder rows below with at least 6 real artists.
-    # Choose a genre theme your team agrees on (hip-hop, jazz, Latin, K-pop, etc.)
-    # TODO: replace placeholder data with your team's chosen artists
+    # Theme: classic and modern hip-hop artists
 
     artists = [
-        # (artist_id, name, genre, origin_city),
-        (1, "TODO — Artist Name", "TODO — Genre", "TODO — City"),
-        # add at least 5 more rows ...
+        # (artist_id, name, genre, origin_city)
+        (1, "Kendrick Lamar",      "Hip-Hop",                "Compton"),
+        (2, "J. Cole",             "Hip-Hop",                "Fayetteville"),
+        (3, "Drake",               "Hip-Hop/R&B",            "Toronto"),
+        (4, "Tyler the Creator",   "Alternative Hip-Hop",    "Los Angeles"),
+        (5, "Nas",                 "East Coast Hip-Hop",     "Queens"),
+        (6, "Lauryn Hill",         "Neo-Soul/Hip-Hop",       "Newark"),
     ]
 
     conn.executemany(
@@ -142,14 +144,36 @@ def seed_database(conn):
 
     # ── Tracks ───────────────────────────────────────────────────────────────
     # Columns: track_id, title, duration_seconds, artist_id
-    # Every artist_id here must exist in the artists list above.
-    # duration_seconds: a 3-minute song = 180 seconds.
-    # TODO: replace placeholder data with your team's chosen tracks (minimum 18)
+    # Kendrick Lamar (artist_id=1) has 5 tracks — satisfies the >=3 requirement
 
     tracks = [
-        # (track_id, title, duration_seconds, artist_id),
-        (1, "TODO — Track Title", 200, 1),
-        # add at least 17 more rows ...
+        # (track_id, title, duration_seconds, artist_id)
+        # Kendrick Lamar — 5 tracks
+        (1,  "HUMBLE.",                177, 1),
+        (2,  "DNA.",                   185, 1),
+        (3,  "Alright",               219, 1),
+        (4,  "Money Trees",            386, 1),
+        (5,  "Swimming Pools",         313, 1),
+        # J. Cole — 4 tracks
+        (6,  "No Role Modelz",         293, 2),
+        (7,  "Love Yourz",             233, 2),
+        (8,  "Middle Child",           218, 2),
+        (9,  "Power Trip",             268, 2),
+        # Drake — 3 tracks
+        (10, "God's Plan",             198, 3),
+        (11, "Hotline Bling",          267, 3),
+        (12, "One Dance",              174, 3),
+        # Tyler the Creator — 3 tracks
+        (13, "See You Again",          239, 4),
+        (14, "EARFQUAKE",              191, 4),
+        (15, "NEW MAGIC WAND",         197, 4),
+        # Nas — 3 tracks
+        (16, "N.Y. State of Mind",     298, 5),
+        (17, "If I Ruled the World",   280, 5),
+        (18, "One Love",               355, 5),
+        # Lauryn Hill — 2 tracks
+        (19, "Ex-Factor",              307, 6),
+        (20, "Doo Wop (That Thing)",   235, 6),
     ]
 
     conn.executemany(
@@ -159,12 +183,13 @@ def seed_database(conn):
 
     # ── Playlists ────────────────────────────────────────────────────────────
     # Columns: playlist_id, playlist_name, owner_name
-    # TODO: replace placeholder data with your team's chosen playlists (minimum 4)
 
     playlists = [
-        # (playlist_id, playlist_name, owner_name),
-        (1, "TODO — Playlist Name", "TODO — Owner"),
-        # add at least 3 more rows ...
+        # (playlist_id, playlist_name, owner_name)
+        (1, "Late Night Vibes",  "Alex"),
+        (2, "Workout Anthems",   "Jordan"),
+        (3, "90s Classics",      "Morgan"),
+        (4, "Chill Session",     "Riley"),
     ]
 
     conn.executemany(
@@ -174,16 +199,37 @@ def seed_database(conn):
 
     # ── PlaylistTrack ─────────────────────────────────────────────────────────
     # Columns: playlist_id, track_id, position
-    # Both playlist_id and track_id must reference rows inserted above.
-    # (playlist_id, track_id) pairs must be unique — the composite PK enforces this.
-    # position is the 1-based slot of the track within the playlist.
-    # At least one artist must have 3+ tracks appearing across these assignments.
-    # TODO: replace placeholder data with your team's chosen assignments (minimum 20)
+    # Kendrick Lamar tracks (1-5) appear across multiple playlists
 
     playlist_tracks = [
-        # (playlist_id, track_id, position),
-        (1, 1, 1),
-        # add at least 19 more rows ...
+        # (playlist_id, track_id, position)
+        # Late Night Vibes (playlist_id=1) — 6 tracks
+        (1,  4,  1),   # Money Trees        — Kendrick Lamar
+        (1,  7,  2),   # Love Yourz         — J. Cole
+        (1, 19,  3),   # Ex-Factor          — Lauryn Hill
+        (1, 18,  4),   # One Love           — Nas
+        (1,  5,  5),   # Swimming Pools     — Kendrick Lamar
+        (1, 13,  6),   # See You Again      — Tyler the Creator
+        # Workout Anthems (playlist_id=2) — 6 tracks
+        (2,  1,  1),   # HUMBLE.            — Kendrick Lamar
+        (2,  2,  2),   # DNA.               — Kendrick Lamar
+        (2,  6,  3),   # No Role Modelz     — J. Cole
+        (2,  8,  4),   # Middle Child       — J. Cole
+        (2, 15,  5),   # NEW MAGIC WAND     — Tyler the Creator
+        (2, 16,  6),   # N.Y. State of Mind — Nas
+        # 90s Classics (playlist_id=3) — 5 tracks
+        (3, 16,  1),   # N.Y. State of Mind — Nas
+        (3, 17,  2),   # If I Ruled the World — Nas
+        (3, 20,  3),   # Doo Wop (That Thing) — Lauryn Hill
+        (3, 19,  4),   # Ex-Factor          — Lauryn Hill
+        (3, 18,  5),   # One Love           — Nas
+        # Chill Session (playlist_id=4) — 6 tracks
+        (4,  3,  1),   # Alright            — Kendrick Lamar
+        (4,  9,  2),   # Power Trip         — J. Cole
+        (4, 10,  3),   # God's Plan         — Drake
+        (4, 12,  4),   # One Dance          — Drake
+        (4, 14,  5),   # EARFQUAKE          — Tyler the Creator
+        (4, 17,  6),   # If I Ruled the World — Nas
     ]
 
     conn.executemany(
@@ -209,38 +255,30 @@ if __name__ == "__main__":
 
     # ── Quick sanity check ────────────────────────────────────────────────────
     row_counts = {
-        "Artist":       conn.execute("SELECT COUNT(*) FROM Artist").fetchone()[0],
-        "Track":        conn.execute("SELECT COUNT(*) FROM Track").fetchone()[0],
-        "Playlist":     conn.execute("SELECT COUNT(*) FROM Playlist").fetchone()[0],
-        "PlaylistTrack":conn.execute("SELECT COUNT(*) FROM PlaylistTrack").fetchone()[0],
+        "Artist":        conn.execute("SELECT COUNT(*) FROM Artist").fetchone()[0],
+        "Track":         conn.execute("SELECT COUNT(*) FROM Track").fetchone()[0],
+        "Playlist":      conn.execute("SELECT COUNT(*) FROM Playlist").fetchone()[0],
+        "PlaylistTrack": conn.execute("SELECT COUNT(*) FROM PlaylistTrack").fetchone()[0],
     }
     print("\nRow counts after seeding:")
     for table, count in row_counts.items():
         print(f"  {table:<16} {count:>3} rows")
 
-    # ── 3b — IntegrityError demonstration ─────────────────────────────────────
-    # TODO: insert a Track row whose artist_id does NOT exist in the Artist table.
-    #       Use artist_id = 9999 (or any value you did not insert).
-    #       The PRAGMA foreign_keys = ON statement makes SQLite enforce this.
-    #       Catch the resulting sqlite3.IntegrityError and print a descriptive message.
-    #
-    # Your code here:
+    # ── 3b — IntegrityError demonstration ────────────────────────────────────
+    # Attempts to insert a Track row whose artist_id does NOT exist in Artist.
+    # artist_id = 9999 was never inserted, so SQLite raises IntegrityError
+    # because PRAGMA foreign_keys = ON is active.
     print("\nIntegrityError demonstration:")
     try:
-        # TODO: write the INSERT statement that should fail
         conn.execute("INSERT INTO Track VALUES (999, 'Ghost Track', 210, 9999)")
         print("  Insert succeeded — did you enable PRAGMA foreign_keys = ON?")
     except sqlite3.IntegrityError as e:
-        # TODO: print a message that identifies which constraint was violated
         print(f"  IntegrityError caught: {e}")
+        print("  --> artist_id 9999 does not exist in Artist; referential integrity violated.")
         print("  This error confirms that foreign key enforcement is active.")
 
     # ── 3c — Persist the RAM database to disk with .backup() ─────────────────
-    # TODO: open a connection to "music.db" and call conn.backup(target_conn)
-    #       to write a permanent copy of the in-memory database to disk.
-    #       Print a confirmation message.  Close the target connection when done.
-    #
-    # Your code here:
+    # Opens a connection to music.db and backs up the in-memory database to it.
     print("\nPersisting database to music.db ...")
     DB_PATH = "music.db"
     target_conn = sqlite3.connect(DB_PATH)
