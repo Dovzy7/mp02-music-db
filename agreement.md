@@ -49,4 +49,5 @@ def get_playlist_durations(conn):
 
 
 ### Integrator Signature
-Daniel Wang, Chinmoy, Rahim
+Daniel Wang(Integrator), Chinmoy, Rahim
+
