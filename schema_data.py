@@ -4,6 +4,9 @@ schema_data.py
 CIS 3120 · MP02 — SQL and Database
 Author 1 module — schema creation and seed data
 
+Team:   Daniel Wang (Integrator), Chinmoy (Author 1), Rahim (Author 2)
+Theme:  Hip-Hop
+
 CONTRACT SUMMARY
 ----------------
 Implement build_database(conn) and seed_database(conn) exactly as specified.
@@ -34,7 +37,7 @@ def build_database(conn):
       - Call conn.execute("PRAGMA foreign_keys = ON;") as the FIRST statement.
       - Use CREATE TABLE IF NOT EXISTS for every table.
       - Create tables in dependency order so foreign key references resolve:
-            Artist  →  Track  →  Playlist  →  PlaylistTrack
+            Artist  ->  Track  ->  Playlist  ->  PlaylistTrack
       - PlaylistTrack must declare a composite PRIMARY KEY (playlist_id, track_id).
       - Call conn.commit() at the end.
 
@@ -61,6 +64,7 @@ def build_database(conn):
     """)
 
     # Step 3 — Track table  (references Artist)
+    # NOTE: column is named 'title' in schema per spec; queries alias it as track_name
     conn.execute("""
         CREATE TABLE IF NOT EXISTS Track (
             track_id         INTEGER PRIMARY KEY,
@@ -99,7 +103,7 @@ def build_database(conn):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def seed_database(conn):
-    """Populate all four tables with realistic music data.
+    """Populate all four tables with realistic hip-hop music data.
 
     Requirements (all graded):
       - Use conn.executemany() for every table — no individual execute() inserts.
@@ -125,16 +129,16 @@ def seed_database(conn):
 
     # ── Artists ──────────────────────────────────────────────────────────────
     # Columns: artist_id, name, genre, origin_city
-    # Theme: classic and modern hip-hop artists
+    # Agreed artists per team agreement
 
     artists = [
-        # (artist_id, name, genre, origin_city)
-        (1, "Kendrick Lamar",      "Hip-Hop",                "Compton"),
-        (2, "J. Cole",             "Hip-Hop",                "Fayetteville"),
-        (3, "Drake",               "Hip-Hop/R&B",            "Toronto"),
-        (4, "Tyler the Creator",   "Alternative Hip-Hop",    "Los Angeles"),
-        (5, "Nas",                 "East Coast Hip-Hop",     "Queens"),
-        (6, "Lauryn Hill",         "Neo-Soul/Hip-Hop",       "Newark"),
+        # (artist_id, name,           genre,      origin_city)
+        (1, "Lil Uzi Vert",  "Hip-Hop/Rap",   "Philadelphia"),
+        (2, "Drake",          "Hip-Hop/R&B",   "Toronto"),
+        (3, "NAV",            "Hip-Hop/Trap",  "Toronto"),
+        (4, "Future",         "Trap/Hip-Hop",  "Atlanta"),
+        (5, "Young Thug",     "Trap/Hip-Hop",  "Atlanta"),
+        (6, "ASAP Rocky",     "Hip-Hop/Rap",   "New York"),
     ]
 
     conn.executemany(
@@ -144,36 +148,36 @@ def seed_database(conn):
 
     # ── Tracks ───────────────────────────────────────────────────────────────
     # Columns: track_id, title, duration_seconds, artist_id
-    # Kendrick Lamar (artist_id=1) has 5 tracks — satisfies the >=3 requirement
+    # Lil Uzi Vert (artist_id=1) has 5 tracks — satisfies the >=3 requirement
 
     tracks = [
-        # (track_id, title, duration_seconds, artist_id)
-        # Kendrick Lamar — 5 tracks
-        (1,  "HUMBLE.",                177, 1),
-        (2,  "DNA.",                   185, 1),
-        (3,  "Alright",               219, 1),
-        (4,  "Money Trees",            386, 1),
-        (5,  "Swimming Pools",         313, 1),
-        # J. Cole — 4 tracks
-        (6,  "No Role Modelz",         293, 2),
-        (7,  "Love Yourz",             233, 2),
-        (8,  "Middle Child",           218, 2),
-        (9,  "Power Trip",             268, 2),
-        # Drake — 3 tracks
-        (10, "God's Plan",             198, 3),
-        (11, "Hotline Bling",          267, 3),
-        (12, "One Dance",              174, 3),
-        # Tyler the Creator — 3 tracks
-        (13, "See You Again",          239, 4),
-        (14, "EARFQUAKE",              191, 4),
-        (15, "NEW MAGIC WAND",         197, 4),
-        # Nas — 3 tracks
-        (16, "N.Y. State of Mind",     298, 5),
-        (17, "If I Ruled the World",   280, 5),
-        (18, "One Love",               355, 5),
-        # Lauryn Hill — 2 tracks
-        (19, "Ex-Factor",              307, 6),
-        (20, "Doo Wop (That Thing)",   235, 6),
+        # (track_id, title,                        duration_seconds, artist_id)
+        # Lil Uzi Vert — 5 tracks
+        (1,  "XO Tour Llif3",                  177, 1),
+        (2,  "Money Longer",                   192, 1),
+        (3,  "The Way Life Goes",              214, 1),
+        (4,  "Futsal Shuffle 2020",            148, 1),
+        (5,  "Bad and Boujee (feat. Migos)",   343, 1),
+        # Drake — 4 tracks
+        (6,  "God's Plan",                     198, 2),
+        (7,  "Hotline Bling",                  267, 2),
+        (8,  "One Dance",                      174, 2),
+        (9,  "In My Feelings",                 217, 2),
+        # NAV — 3 tracks
+        (10, "Wanted You",                     193, 3),
+        (11, "Tap",                            178, 3),
+        (12, "Call Me",                        196, 3),
+        # Future — 3 tracks
+        (13, "Mask Off",                       206, 4),
+        (14, "Life Is Good",                   237, 4),
+        (15, "March Madness",                  251, 4),
+        # Young Thug — 3 tracks
+        (16, "Havana",                         217, 5),
+        (17, "Best Friend",                    181, 5),
+        (18, "Hot (feat. Gunna)",              195, 5),
+        # ASAP Rocky — 2 tracks
+        (19, "Praise the Lord",               209, 6),
+        (20, "Everyday",                       258, 6),
     ]
 
     conn.executemany(
@@ -185,11 +189,11 @@ def seed_database(conn):
     # Columns: playlist_id, playlist_name, owner_name
 
     playlists = [
-        # (playlist_id, playlist_name, owner_name)
-        (1, "Late Night Vibes",  "Alex"),
-        (2, "Workout Anthems",   "Jordan"),
-        (3, "90s Classics",      "Morgan"),
-        (4, "Chill Session",     "Riley"),
+        # (playlist_id, playlist_name,      owner_name)
+        (1, "Trap Bangers",      "Daniel"),
+        (2, "Late Night Cruise", "Chinmoy"),
+        (3, "Gym Motivation",    "Rahim"),
+        (4, "Chill Trap",        "Daniel"),
     ]
 
     conn.executemany(
@@ -199,37 +203,37 @@ def seed_database(conn):
 
     # ── PlaylistTrack ─────────────────────────────────────────────────────────
     # Columns: playlist_id, track_id, position
-    # Kendrick Lamar tracks (1-5) appear across multiple playlists
+    # Lil Uzi Vert tracks (1-5) spread across playlists — satisfies >=3 requirement
 
     playlist_tracks = [
         # (playlist_id, track_id, position)
-        # Late Night Vibes (playlist_id=1) — 6 tracks
-        (1,  4,  1),   # Money Trees        — Kendrick Lamar
-        (1,  7,  2),   # Love Yourz         — J. Cole
-        (1, 19,  3),   # Ex-Factor          — Lauryn Hill
-        (1, 18,  4),   # One Love           — Nas
-        (1,  5,  5),   # Swimming Pools     — Kendrick Lamar
-        (1, 13,  6),   # See You Again      — Tyler the Creator
-        # Workout Anthems (playlist_id=2) — 6 tracks
-        (2,  1,  1),   # HUMBLE.            — Kendrick Lamar
-        (2,  2,  2),   # DNA.               — Kendrick Lamar
-        (2,  6,  3),   # No Role Modelz     — J. Cole
-        (2,  8,  4),   # Middle Child       — J. Cole
-        (2, 15,  5),   # NEW MAGIC WAND     — Tyler the Creator
-        (2, 16,  6),   # N.Y. State of Mind — Nas
-        # 90s Classics (playlist_id=3) — 5 tracks
-        (3, 16,  1),   # N.Y. State of Mind — Nas
-        (3, 17,  2),   # If I Ruled the World — Nas
-        (3, 20,  3),   # Doo Wop (That Thing) — Lauryn Hill
-        (3, 19,  4),   # Ex-Factor          — Lauryn Hill
-        (3, 18,  5),   # One Love           — Nas
-        # Chill Session (playlist_id=4) — 6 tracks
-        (4,  3,  1),   # Alright            — Kendrick Lamar
-        (4,  9,  2),   # Power Trip         — J. Cole
-        (4, 10,  3),   # God's Plan         — Drake
-        (4, 12,  4),   # One Dance          — Drake
-        (4, 14,  5),   # EARFQUAKE          — Tyler the Creator
-        (4, 17,  6),   # If I Ruled the World — Nas
+        # Trap Bangers (playlist_id=1) — 6 tracks
+        (1,  1,  1),   # XO Tour Llif3         — Lil Uzi Vert
+        (1, 13,  2),   # Mask Off               — Future
+        (1, 18,  3),   # Hot (feat. Gunna)      — Young Thug
+        (1,  6,  4),   # God's Plan             — Drake
+        (1, 19,  5),   # Praise the Lord        — ASAP Rocky
+        (1,  3,  6),   # The Way Life Goes      — Lil Uzi Vert
+        # Late Night Cruise (playlist_id=2) — 4 tracks
+        # NOTE: track 5 (Bad and Boujee) and track 20 (Everyday) are intentionally
+        # left off all playlists so get_tracks_on_no_playlist() returns results.
+        (2,  7,  1),   # Hotline Bling          — Drake
+        (2, 10,  2),   # Wanted You             — NAV
+        (2, 16,  3),   # Havana                 — Young Thug
+        (2,  9,  4),   # In My Feelings         — Drake
+        # Gym Motivation (playlist_id=3) — 6 tracks
+        (3,  2,  1),   # Money Longer           — Lil Uzi Vert
+        (3,  4,  2),   # Futsal Shuffle 2020    — Lil Uzi Vert
+        (3, 14,  3),   # Life Is Good           — Future
+        (3, 15,  4),   # March Madness          — Future
+        (3, 17,  5),   # Best Friend            — Young Thug
+        (3, 11,  6),   # Tap                    — NAV
+        # Chill Trap (playlist_id=4) — 5 tracks
+        (4,  8,  1),   # One Dance              — Drake
+        (4, 12,  2),   # Call Me                — NAV
+        (4, 19,  3),   # Praise the Lord        — ASAP Rocky
+        (4, 16,  4),   # Havana                 — Young Thug
+        (4, 10,  5),   # Wanted You             — NAV
     ]
 
     conn.executemany(
